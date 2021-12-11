@@ -1,6 +1,7 @@
-// check if assistance is on
+// check if assistance is onxw
 auto.waitFor();
 sleep(1000);
+xw;
 
 //set screen matrix
 setScreenMetrics(1080, 2160);
@@ -37,6 +38,8 @@ var floatHeight = 220;
 var floatStatus = 1;
 
 var totalLoop = 1;
+
+var loopThread;
 
 var deviceHeight = device.height;
 var deviceWidth = device.width;
@@ -112,14 +115,14 @@ if (!requestScreenCapture()) {
 var showFloatThread = threads.start(function () {
   showFloat();
 });
-//stop thread: showFloatThread.interrupt();
+showFloatThread.waitFor();
 
 function showFloat() {
   //float header UI
   floatHeader = floaty.rawWindow(
     <horizontal
       bg='#000000'
-      alpha='0.5'
+      alpha='0.65'
       gravity='center_horizontal|center_vertical'
     >
       <text
@@ -222,12 +225,12 @@ function handleStartBtn() {
 
 function startLoop() {
   setFloatStatus(0);
-  var currentLoop = totalLoop;
+  // var currentLoop = totalLoop;
 
-  var battleThread = threads.start(function () {
+  loopThread = threads.start(function () {
     startBattle();
   });
-  battleThread.waitFor();
+  loopThread.waitFor();
 
   // setInterval(() => {
   //   //如果500秒不变数字 重置thread
@@ -243,7 +246,7 @@ function startLoop() {
 
 function startBattle() {
   while (true) {
-    sleep(500);
+    sleep(300);
 
     floatHeader.header.setText('检查开始行动');
     var blueStart = images.read(blueStartPath);
@@ -301,18 +304,18 @@ function startBattle() {
       threshold: 0.75,
     });
     redStartTick.recycle();
-    sleep(500);
+    sleep(300);
     if (redStartTickMatched) {
       click(
         redStartTickMatched.x + random(55, 125),
         redStartTickMatched.y + random(10, 30)
       );
-      sleep(1000);
+      sleep(500);
 
       floatHeader.header.setText('当前第 ' + totalLoop.toString() + ' 次代理');
     }
 
-    sleep(20000);
+    sleep(10000);
 
     //检查是否在战斗中
     while (true) {
@@ -343,10 +346,11 @@ function startBattle() {
           battleEndMatched.x + random(55, 125),
           battleEndMatched.y + random(20, 70)
         );
-        sleep(5000);
+        sleep(2000);
       }
 
       if (!battleMatched && !battleEndMatched) {
+        sleep(1000);
         totalLoop++;
         break;
       }
@@ -355,9 +359,13 @@ function startBattle() {
 }
 
 function handleStopBtn() {
-  log('this is stop btn');
-
   endLoop();
 }
 
-function endLoop() {}
+function endLoop() {
+  floatHeader.header.setText('已停止');
+
+  if (loopThread !== null) {
+    loopThread.interrupt();
+  }
+}
