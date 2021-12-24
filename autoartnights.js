@@ -38,6 +38,25 @@ var battleEndPath = '/storage/emulated/0/Pictures/Screenshots/battleEnd.jpg';
 // 226 * 82
 var levelUpPath = '/storage/emulated/0/Pictures/Screenshots/levelUp.jpg';
 
+// 每日更新图片
+// 922 * 427
+var updateConfirmPath =
+  '/storage/emulated/0/Pictures/Screenshots/updateConfirm.jpg';
+// 104 * 92
+var confirmCloseOnePath =
+  '/storage/emulated/0/Pictures/Screenshots/confirmCloseOne.jpg';
+// 96 * 90
+var confirmCloseTwoPath =
+  '/storage/emulated/0/Pictures/Screenshots/confirmCloseTwo.jpg';
+// 585 * 289
+var supplyPath = '/storage/emulated/0/Pictures/Screenshots/supply.jpg';
+// 234 * 131
+var startPath = '/storage/emulated/0/Pictures/Screenshots/start.jpg';
+// 158 * 46
+var lastBattlePath = '/storage/emulated/0/Pictures/Screenshots/lastBattle.jpg';
+// 298 * 88
+var checkAutoPath = '/storage/emulated/0/Pictures/Screenshots/checkAuto.jpg';
+
 var floatWidth = 430;
 var floatHeight = 220;
 var floatStatus = 1;
@@ -314,6 +333,26 @@ function startBattle() {
         );
         sleep(1000);
       }
+
+      var blueStartTwo = images.read(blueStartPathTwo);
+      var blueStartTwoMatched = images.findImage(
+        captureScreen(),
+        blueStartTwo,
+        {
+          threshold: 0.75,
+        }
+      );
+      blueStartTwo.recycle();
+      sleep(300);
+      if (blueStartTwoMatched) {
+        sleep(300);
+        // 开始行动 位置：{1824.0, 956.0}
+        click(
+          blueStartTwoMatched.x + random(20, 100),
+          blueStartTwoMatched.y + random(20, 40)
+        );
+        sleep(1000);
+      }
     }
 
     floatHeader.header.setText('检查红色行动');
@@ -332,6 +371,117 @@ function startBattle() {
       sleep(500);
 
       floatHeader.header.setText('当前第 ' + totalLoop.toString() + ' 次代理');
+    }
+
+    var updateConfirm = images.read(updateConfirmPath);
+    var updateConfirmMatched = images.findImage(
+      captureScreen(),
+      updateConfirm,
+      {
+        threshold: 0.75,
+      }
+    );
+    updateConfirm.recycle();
+    sleep(1000);
+    if (updateConfirmMatched) {
+      floatHeader.header.setText('检测到需要更新');
+      click(
+        updateConfirmMatched.x + random(400, 500),
+        updateConfirmMatched.y + random(385, 420)
+      );
+      sleep(1000);
+
+      var confirmCloseOne = images.read(confirmCloseOnePath);
+      var confirmCloseOneMatched = images.findImage(
+        captureScreen(),
+        confirmCloseOne,
+        {
+          threshold: 0.65,
+        }
+      );
+      confirmCloseOne.recycle();
+      if (confirmCloseOneMatched) {
+        floatHeader.header.setText('更新中');
+        click(
+          updateConfirmMatched.x + random(50, 70),
+          updateConfirmMatched.y + random(50, 60)
+        );
+        sleep(1000);
+      }
+
+      var confirmCloseTwo = images.read(confirmCloseTwoPath);
+      var confirmCloseTwoMatched = images.findImage(
+        captureScreen(),
+        confirmCloseTwo,
+        {
+          threshold: 0.65,
+        }
+      );
+      confirmCloseTwo.recycle();
+      if (confirmCloseTwoMatched) {
+        floatHeader.header.setText('更新中');
+        click(
+          updateConfirmMatched.x + random(50, 60),
+          updateConfirmMatched.y + random(50, 60)
+        );
+        sleep(1000);
+      }
+
+      var supply = images.read(supplyPath);
+      var supplyMatched = images.findImage(captureScreen(), supply, {
+        threshold: 0.65,
+      });
+      supply.recycle();
+      if (supplyMatched) {
+        floatHeader.header.setText('更新中');
+        click(
+          updateConfirmMatched.x + random(250, 350),
+          updateConfirmMatched.y + random(130, 170)
+        );
+        sleep(1000);
+      }
+
+      var start = images.read(startPath);
+      var startMatched = images.findImage(captureScreen(), start, {
+        threshold: 0.75,
+      });
+      start.recycle();
+      if (startMatched) {
+        floatHeader.header.setText('更新中');
+        click(
+          updateConfirmMatched.x + random(100, 150),
+          updateConfirmMatched.y + random(65, 85)
+        );
+        sleep(1000);
+      }
+
+      var lastBattle = images.read(lastBattlePath);
+      var lastBattleMatched = images.findImage(captureScreen(), lastBattle, {
+        threshold: 0.7,
+      });
+      lastBattle.recycle();
+      if (lastBattleMatched) {
+        floatHeader.header.setText('更新后');
+        click(
+          updateConfirmMatched.x + random(60, 80),
+          updateConfirmMatched.y + random(20, 30)
+        );
+        sleep(1000);
+      }
+
+      var checkAuto = images.read(checkAutoPath);
+      var checkAutoMatched = images.findImage(captureScreen(), checkAuto, {
+        threshold: 0.75,
+      });
+      checkAuto.recycle();
+      if (checkAutoMatched) {
+        floatHeader.header.setText('选择代理');
+        click(
+          updateConfirmMatched.x + random(120, 200),
+          updateConfirmMatched.y + random(40, 60)
+        );
+        sleep(1000);
+      }
     }
 
     sleep(10000);
@@ -365,6 +515,21 @@ function startBattle() {
         click(
           levelUpMatched.x + random(55, 125),
           levelUpMatched.y + random(20, 50)
+        );
+        sleep(2000);
+      }
+
+      var battleFail = images.read(failContinuePath);
+      var battleFailMatched = images.findImage(captureScreen(), battleFail, {
+        threshold: 0.7,
+      });
+      battleFail.recycle();
+      sleep(200);
+      if (battleFailMatched) {
+        floatHeader.header.setText('战斗失误选择继续结算');
+        click(
+          battleFailMatched.x + random(55, 125),
+          battleFailMatched.y + random(20, 50)
         );
         sleep(2000);
       }
