@@ -1,7 +1,6 @@
 // check if assistance is onxw
 auto.waitFor();
 sleep(1000);
-xw;
 
 //set screen matrix
 setScreenMetrics(1080, 2160);
@@ -15,6 +14,9 @@ setScreenMetrics(1080, 2160);
 
 //width=259, height=53
 var blueStartPath = '/storage/emulated/0/Pictures/Screenshots/blueStart.jpg';
+// 287 * 62
+var blueStartPathTwo =
+  '/storage/emulated/0/Pictures/Screenshots/blueStartTwo.jpg';
 
 // 218 x 84
 var failContinuePath =
@@ -32,6 +34,9 @@ var battlePath = '/storage/emulated/0/Pictures/Screenshots/battle.jpg';
 
 // 309 x 95
 var battleEndPath = '/storage/emulated/0/Pictures/Screenshots/battleEnd.jpg';
+
+// 226 * 82
+var levelUpPath = '/storage/emulated/0/Pictures/Screenshots/levelUp.jpg';
 
 var floatWidth = 430;
 var floatHeight = 220;
@@ -150,7 +155,7 @@ function showFloat() {
       bg='#696969'
       alpha='0.75'
     >
-      <horizontal gravity='center_horizontal|center_vertical'>
+      {/* <horizontal gravity='center_horizontal|center_vertical'>
         <text
           id='loopTitle'
           w='70'
@@ -169,7 +174,7 @@ function showFloat() {
           textColor='#ffffff'
           gravity='center_horizontal|center_vertical'
         />
-      </horizontal>
+      </horizontal> */}
       <horizontal gravity='center_horizontal|center_vertical'>
         <vertical gravity='center_horizontal|center_vertical' w='78'>
           <button
@@ -253,7 +258,12 @@ function startBattle() {
     var blueStartMatched = images.findImage(captureScreen(), blueStart, {
       threshold: 0.75,
     });
+    var blueStartTwo = images.read(blueStartPathTwo);
+    var blueStartTwoMatched = images.findImage(captureScreen(), blueStartTwo, {
+      threshold: 0.75,
+    });
     blueStart.recycle();
+    blueStartTwo.recycle();
     sleep(300);
     if (blueStartMatched) {
       sleep(300);
@@ -261,6 +271,15 @@ function startBattle() {
       click(
         blueStartMatched.x + random(20, 100),
         blueStartMatched.y + random(20, 40)
+      );
+      sleep(1000);
+    }
+    if (blueStartTwoMatched) {
+      sleep(300);
+      // 开始行动 位置：{1824.0, 956.0}
+      click(
+        blueStartTwoMatched.x + random(20, 100),
+        blueStartTwoMatched.y + random(20, 40)
       );
       sleep(1000);
     }
@@ -334,6 +353,22 @@ function startBattle() {
       //TODO 处理 战斗 托管 异常
 
       sleep(3000);
+
+      var levelUp = images.read(levelUpPath);
+      var levelUpMatched = images.findImage(captureScreen(), levelUp, {
+        threshold: 0.65,
+      });
+      levelUp.recycle();
+      sleep(200);
+      if (levelUpMatched) {
+        floatHeader.header.setText('升级中');
+        click(
+          levelUpMatched.x + random(55, 125),
+          levelUpMatched.y + random(20, 50)
+        );
+        sleep(2000);
+      }
+
       var battleEnd = images.read(battleEndPath);
       var battleEndMatched = images.findImage(captureScreen(), battleEnd, {
         threshold: 0.75,
